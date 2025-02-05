@@ -3,29 +3,27 @@ import 'package:dio/dio.dart';
 import 'package:valorant_strategies_flutter/Models/ValAgents.dart';
 
 class AgentsProvider with ChangeNotifier {
-  List<Agents> _agentsList = [];
+  List<ValAgents> agentsList = [];
 
-  List<Agents> get agentsList => _agentsList;
+  List<ValAgents> get getAgentsList => agentsList;
 
   Future<void> fetchAgents() async {
     final dio = Dio();
     try {
       var response = await dio.get('https://valorant-api.com/v1/agents');
-      var jsonData = response.data;
 
-      _agentsList.clear(); // Clear previous data
-      for (var getAgents in jsonData['data']) {
-        final agents = Agents(
-          displayName: getAgents['displayName'],
-          description: getAgents['description'],
-          displayIconSmall: getAgents['displayIconSmall'],
-          background: getAgents['background'],
-        );
-        _agentsList.add(agents);
+      var jsonData = response.data;
+      List<ValAgents> tempAgents = [];
+
+      for (var agent in jsonData['data']) {
+        final newAgent = ValAgents.fromJson(agent);
+        tempAgents.add(newAgent);
       }
-      notifyListeners(); // Notify UI to rebuild
+
+      agentsList = tempAgents; // Only update list after parsing all agents
+      notifyListeners();
     } catch (e) {
-      print('Error occurred: $e');
+      print('Unable to fetch Agents: $e');
     }
   }
 }

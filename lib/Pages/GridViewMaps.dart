@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart'; // ✅ Import the caching package
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:valorant_strategies_flutter/Providers/ValMapsProvider.dart';
 import 'package:valorant_strategies_flutter/Utils/CustomeAppBar.dart';
 
@@ -27,7 +27,7 @@ class _GridviewmapsState extends State<Gridviewmaps> {
       body: Consumer<MapProvider>(
         builder: (context, mapProvider, child) {
           if (mapProvider.getMapList.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(),);
           }
 
           return GridView.builder(
@@ -45,7 +45,7 @@ class _GridviewmapsState extends State<Gridviewmaps> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     image: DecorationImage(
-                      image: CachedNetworkImageProvider(map.splash), // ✅ Cached Image
+                      image: CachedNetworkImageProvider(map.splash),
                       colorFilter: const ColorFilter.mode(
                         Color.fromARGB(84, 0, 0, 0),
                         BlendMode.darken,
