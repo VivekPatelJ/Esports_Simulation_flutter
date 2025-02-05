@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // ✅ Import the caching package
 import 'package:valorant_strategies_flutter/Providers/ValMapsProvider.dart';
 import 'package:valorant_strategies_flutter/Utils/CustomeAppBar.dart';
 
@@ -22,7 +23,7 @@ class _GridviewmapsState extends State<Gridviewmaps> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:Customeappbar(),
+      appBar: Customeappbar(),
       body: Consumer<MapProvider>(
         builder: (context, mapProvider, child) {
           if (mapProvider.getMapList.isEmpty) {
@@ -42,19 +43,21 @@ class _GridviewmapsState extends State<Gridviewmaps> {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      image: DecorationImage(
-                        image: NetworkImage(map.splash),
-                        colorFilter: ColorFilter.mode(
-                            const Color.fromARGB(84, 0, 0, 0),
-                            BlendMode.darken),
-                        fit: BoxFit.cover,
+                    borderRadius: BorderRadius.circular(15.0),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(map.splash), // ✅ Cached Image
+                      colorFilter: const ColorFilter.mode(
+                        Color.fromARGB(84, 0, 0, 0),
+                        BlendMode.darken,
                       ),
-                      color: Theme.of(context).colorScheme.secondaryContainer),
+                      fit: BoxFit.cover,
+                    ),
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                  ),
                   child: Center(
                     child: Text(
                       map.displayName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 25.0,
                         fontFamily: 'valorantfonts',
                         fontWeight: FontWeight.w200,
