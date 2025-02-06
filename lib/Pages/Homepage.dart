@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tilt/flutter_tilt.dart';
 import 'package:provider/provider.dart';
 import 'package:valorant_strategies_flutter/Providers/ValAgentsProvider.dart';
 import 'package:valorant_strategies_flutter/Utils/CustomeAppBar.dart';
@@ -49,31 +50,37 @@ class _HomepageState extends State<Homepage> {
               final agent = agentsProvider.agentsList[index];
               return Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
+                child: Tilt(
+                  borderRadius: BorderRadius.circular(12.0),
+                  tiltConfig: TiltConfig(angle: 15.0),
+                  lightConfig: LightConfig(minIntensity: 0.1),
+                  shadowConfig: const ShadowConfig(
+                    minIntensity: 0.05,
+                    maxIntensity: 0.4,
+                    offsetFactor: 0.08,
+                    minBlurRadius: 10,
+                    maxBlurRadius: 15,
                   ),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: CachedNetworkImage(
-                          imageUrl: agent.background,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.center,
-                          placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              const Center(child: Icon(Icons.error)),
-                        ),
-                      ),
-                      Center(
-                        child: Image(
-                          image: CachedNetworkImageProvider(
-                              agent.displayIconSmall),
+                  childLayout: ChildLayout(
+                    outer: [
+                      Positioned(
+                        top: 200,
+                        child: TiltParallax(
+                          size: const Offset(-20, -20),
+                          child: Container(),
                         ),
                       ),
                     ],
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: CachedNetworkImageProvider(agent.background),
+                          fit: BoxFit.cover),
+                    ),
+                    child: Image(
+                      image: CachedNetworkImageProvider(agent.displayIconSmall),
+                    ),
                   ),
                 ),
               );
