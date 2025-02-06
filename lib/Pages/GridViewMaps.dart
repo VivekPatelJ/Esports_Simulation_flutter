@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tilt/flutter_tilt.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:valorant_strategies_flutter/Providers/ValMapsProvider.dart';
@@ -27,7 +28,9 @@ class _GridviewmapsState extends State<Gridviewmaps> {
       body: Consumer<MapProvider>(
         builder: (context, mapProvider, child) {
           if (mapProvider.getMapList.isEmpty) {
-            return const Center(child: CircularProgressIndicator(),);
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
           return GridView.builder(
@@ -41,29 +44,41 @@ class _GridviewmapsState extends State<Gridviewmaps> {
               final map = mapProvider.getMapList[index];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(map.splash),
-                      colorFilter: const ColorFilter.mode(
-                        Color.fromARGB(84, 0, 0, 0),
-                        BlendMode.darken,
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+                child: Tilt(
+                  borderRadius: BorderRadius.circular(12.0),
+                  tiltConfig: TiltConfig(angle: 15.0),
+                  lightConfig: LightConfig(minIntensity: 0.1),
+                  shadowConfig: const ShadowConfig(
+                    minIntensity: 0.05,
+                    maxIntensity: 0.4,
+                    offsetFactor: 0.08,
+                    minBlurRadius: 10,
+                    maxBlurRadius: 15,
                   ),
-                  child: Center(
-                    child: Text(
-                      map.displayName,
-                      style: const TextStyle(
-                        fontSize: 25.0,
-                        fontFamily: 'valorantfonts',
-                        fontWeight: FontWeight.w200,
+                  childLayout: ChildLayout(
+                    outer: [
+                      Positioned(
+                        top: 200,
+                        child: TiltParallax(
+                          size: const Offset(-20, -20),
+                          child: Container(),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+                  child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: CachedNetworkImageProvider(map.splash),
+                            fit: BoxFit.cover),
+                      ),
+                      child: Center(
+                        child: Text(
+                          map.displayName,
+                          style: TextStyle(
+                              fontFamily: 'valorantfonts', fontSize: 25.0),
+                        ),
+                      )),
                 ),
               );
             },
