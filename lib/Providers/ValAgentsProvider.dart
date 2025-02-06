@@ -17,10 +17,12 @@ class AgentsProvider with ChangeNotifier {
 
       for (var agent in jsonData['data']) {
         final newAgent = ValAgents.fromJson(agent);
-        tempAgents.add(newAgent);
+        if (newAgent.isPlayableCharacter) { // ✅ Filter out non-playable agents
+          tempAgents.add(newAgent);
+        }
       }
 
-      agentsList = tempAgents; // Only update list after parsing all agents
+      agentsList = tempAgents;
       notifyListeners();
     } catch (e) {
       print('Unable to fetch Agents: $e');
